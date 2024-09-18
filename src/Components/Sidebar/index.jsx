@@ -13,7 +13,6 @@ const StyledAside = styled.aside`
     border-radius: 8px;
     color: var(--white);
     width: 177px;
-    height: 100%;
 
     display: flex;
     flex-direction: column;
@@ -22,16 +21,17 @@ const StyledAside = styled.aside`
     padding: 40px;
 
     `
-const StyledPublishButton = styled.button`
+const StyledPublishLink = styled(Link)`
     background-color: var(--dark-gray);
     padding: 12px 30px 12px 30px;
     color: var(--highlight-green);
     border: 1px solid var(--highlight-green);
     border-radius: 8px;
     font-family: var(--font-primary);
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 300;
     cursor: pointer;
+    text-decoration: none;
     
     &:hover {
         scale:1.1;
@@ -92,10 +92,8 @@ const Sidebar = () => {
 
     return (
         <StyledAside>
-            <Link to={'/'}>
-                <img src={Logo} alt="Codeconnect Logo" />
-            </Link>
-            <StyledPublishButton> Publish </StyledPublishButton>
+            <img src={Logo} alt="Codeconnect Logo" />
+            <StyledPublishLink to={'/'} > Publish </StyledPublishLink>
             {
                 NavButtons.map((button) =>
                     <StyledNavLink to={button.route} key={button.id}>
