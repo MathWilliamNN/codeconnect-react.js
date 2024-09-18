@@ -68,5 +68,9 @@ table {
 body {
 	font-family: var(--font-primary);
 	background-color: var(--graphite);
-	padding: 56px 360px 0 360px;
+	padding: 56px;
+	display: flex;
+	align-items: start;
+	justify-content: center;
+	height: 100vh;
 }

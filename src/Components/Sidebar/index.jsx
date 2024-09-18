@@ -63,7 +63,7 @@ const Sidebar = () => {
             id: 0,
             src: Feed,
             alt: "Sheet Icon",
-            route: '/'
+            route: '/feed'
         },
         {
             text: "Profile",
@@ -92,7 +92,9 @@ const Sidebar = () => {
 
     return (
         <StyledAside>
-            <img src={Logo} alt="Codeconnect Logo" />
+            <Link to={'/'}>
+                <img src={Logo} alt="Codeconnect Logo" />
+            </Link>
             <StyledPublishButton> Publish </StyledPublishButton>
             {
                 NavButtons.map((button) =>
