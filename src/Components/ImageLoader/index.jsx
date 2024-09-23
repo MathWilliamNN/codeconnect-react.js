@@ -1,8 +1,10 @@
 
 import styled from "styled-components"
-import exampleImg from '../../assets/images/imagem1.png'
 import uploadIcon from '../../assets/images/upload.svg'
 import closeIcon from '../../assets/images/close.svg'
+import { useContext, useRef, useState } from "react"
+import { DataContext } from "../../Context"
+import exampleImg from '../../assets/images/imagem1.png'
 
 const StyledContainer = styled.section`
     display: flex;
@@ -33,6 +35,11 @@ const StyledUploadButton = styled.button`
     justify-content: center;
     align-items: center;
     gap:8px;
+
+    cursor: pointer;
+    &:hover{
+        scale: 1.02
+    }
 `
 const StyledUploadedImgName = styled.h3`
     color: var(--medium-gray);
@@ -43,18 +50,51 @@ const StyledUploadedImgName = styled.h3`
     gap: 4px;
 `
 const ImageLoader = () => {
+
+
+    const { displayImg, setDisplayImg } = useContext(DataContext);
+    const fileInputRef = useRef(null);
+    const [displayImgName, setDisplayImgName] = useState('image_projeto.png');
+
+
+    const handleButtonClick = () => {
+        fileInputRef.current.click(); // transfere o click pro input de imagem
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file); //gera url temporaria do arquivo enviado
+            setDisplayImg(imageUrl);
+            setDisplayImgName(file.name);
+        }
+    };
+
+    const resetImgInput = () => {
+        setDisplayImg(exampleImg);
+        setDisplayImgName('image_projeto.png');
+    }
+
+
     return (
         <StyledContainer>
             <StyledImgBox>
-                <img src={exampleImg} alt="Example image upload" />
+                <img src={displayImg ? displayImg : exampleImg} alt="Example image upload" />
             </StyledImgBox>
-            <StyledUploadButton>
+            <StyledUploadButton onClick={handleButtonClick} >
                 Upload Image
                 <img src={uploadIcon} />
             </StyledUploadButton>
+            <input
+                type="file"
+                accept="image/*"
+                id="image-upload"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleFileChange} />
             <StyledUploadedImgName>
-                image_projeto.png
-                <img src={closeIcon}/>
+                {displayImgName}
+                <img style={{cursor: 'pointer'}} onClick={resetImgInput} src={closeIcon} />
             </StyledUploadedImgName>
         </StyledContainer>
     )

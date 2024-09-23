@@ -6,6 +6,7 @@ import AboutUs from "./Pages/AboutUs"
 import Logout from "./Pages/Logout"
 import Home from "./Pages/Home"
 import styled from "styled-components"
+import { DataContextProvider } from "./Context"
 
 const StyledAppContainer = styled.main`
   display: flex;
@@ -17,14 +18,16 @@ function App() {
   return (
     <BrowserRouter>
       <StyledAppContainer>
-        <DefaultPage />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/feed" element={<Feed />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/info" element={<AboutUs />} />
-          <Route path="/exit" element={<Logout />} />
-        </Routes>
+        <DataContextProvider>
+          <DefaultPage />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/info" element={<AboutUs />} />
+            <Route path="/exit" element={<Logout />} />
+          </Routes>
+        </DataContextProvider>
       </StyledAppContainer>
     </BrowserRouter>
   )

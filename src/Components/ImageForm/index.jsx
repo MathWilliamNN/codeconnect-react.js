@@ -2,6 +2,9 @@ import styled from "styled-components";
 import uploadIcon from '../../assets/images/upload.svg'
 import deleteIcon from '../../assets/images/trash.svg'
 import closeIcon from '../../assets/images/close-black.svg'
+import { useContext, useState } from "react";
+import { DataContext } from "../../Context";
+import exampleImg from '../../assets/images/imagem1.png'
 
 
 const StyledContainer = styled.section`
@@ -76,6 +79,12 @@ const StyledDiscardButton = styled.button`
     justify-content: center;
     gap: 8px;
     padding: 16px;
+
+
+    cursor: pointer;
+    &:hover {
+        scale: 1.05;
+    }
 `
 const StyledUploadButton = styled.button`
     width: 45%;
@@ -89,25 +98,76 @@ const StyledUploadButton = styled.button`
     justify-content: center;
     gap: 8px;
     padding: 16px;
+
+    
+    cursor: pointer;
+    &:hover {
+        scale: 1.05;
+    }
 `
 
-
-
 const ImageForm = () => {
+
+    const { displayImg, setDisplayImg, uploadedProjects, setUploadedProjects } = useContext(DataContext);
+    const [formData, setFormData] = useState({
+        projectName: '',
+        projectDescription: '',
+        projectTags: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
+
+    const handlePublish = () => {
+
+
+        //complementa o objeto com a imagem que foi recebida no upload
+        const projectData = {
+            ...formData,
+            coverImg: displayImg
+        };
+
+        // envia o projeto pra array de uploadedProjects
+        setUploadedProjects(prevProjects => [
+            ...prevProjects,
+            projectData
+        ]);
+
+
+        //redefine a imagem para a imagem padrao
+        setDisplayImg(exampleImg);
+
+        //limpa o formulario apos o upload
+        setFormData({
+            projectName: '',
+            projectDescription: '',
+            projectTags: ''
+        });
+
+        console.log("Projeto publicado: ", projectData);
+        console.log('Uploaded projects:', uploadedProjects);
+    };
+
     return (
         <StyledContainer>
             <StyledFormTitle> New Project </StyledFormTitle>
             <StyledInputBox>
                 <StyledInputLabel> Project Name </StyledInputLabel>
-                <StyledInput placeholder="React zero to hero..." />
+                <StyledInput name="projectName" placeholder="React zero to hero..." onChange={handleChange} value={formData.projectName} />
             </StyledInputBox>
             <StyledInputBox>
                 <StyledInputLabel> Description </StyledInputLabel>
-                <StyledInput style={{ height: '160px' }} placeholder="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo..." />
+                <StyledInput value={formData.projectDescription} onChange={handleChange} name="projectDescription" style={{ height: '160px' }} placeholder="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo..." />
             </StyledInputBox>
             <StyledInputBox>
                 <StyledInputLabel> Tags </StyledInputLabel>
-                <StyledInput placeholder="React..." />
+                <StyledInput value={formData.projectTags} onChange={handleChange} name="projectTags" placeholder="React..." />
             </StyledInputBox>
             <StyledTagsContainer>
                 <StyledTag> Tag 1 <img src={closeIcon} /></StyledTag>
@@ -115,7 +175,7 @@ const ImageForm = () => {
             </StyledTagsContainer>
             <StyledButtonsContainer>
                 <StyledDiscardButton> Discard <img src={deleteIcon} /></StyledDiscardButton>
-                <StyledUploadButton> Publish <img style={{filter: 'brightness(35%)'}} src={uploadIcon} /> </StyledUploadButton>
+                <StyledUploadButton onClick={handlePublish} > Publish <img style={{ filter: 'brightness(35%)' }} src={uploadIcon} /> </StyledUploadButton>
             </StyledButtonsContainer>
         </StyledContainer>
     )
